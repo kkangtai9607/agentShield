@@ -159,12 +159,13 @@ HTTP 部署：`.env` 中 `POLICY_FILE=./config/my_policy.yaml`
 
 ---
 
-## LangChain / MCP
+## LangChain / MCP / 主流 Agent
 
-- LangChain：`app/agents/langchain_tools.py` → `execute_via_shield`
-- MCP：`python -m app.agents.mcp_server`（stdio）
+- **Cursor / Claude Desktop / Trae**：MCP stdio → `python -m app.agents.mcp_server`（详见 [INTEGRATION-AGENTS.md](./INTEGRATION-AGENTS.md)）
+- **Claude API / OpenAI Codex**：在 `tool_use` / `tool_calls` 循环里调 HTTP evaluate 或 embed
+- **LangChain**：`app/agents/langchain_tools.py` → `execute_via_shield`
 
-二者在演示环境中仍依赖控制台后端；**自研 Agent 优先推荐嵌入模式**。
+完整主流 Agent 接入指南：**[INTEGRATION-AGENTS.md](./INTEGRATION-AGENTS.md)**
 
 ---
 
