@@ -39,4 +39,4 @@ Output zips will be in submission/output/
   SUBMISSION_CHECKLIST.txt       提交前核对清单
 
 Online demo: http://114.215.209.144:8088
-GitHub: https://github.com/kkangtai9607/agentShield
+GitHub: https://github.com/huang08666/agentShield

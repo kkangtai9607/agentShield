@@ -1,0 +1,20 @@
+[Unit]
+Description=AgentShield API (FastAPI)
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/agentshield/backend
+Environment=PYTHONPATH=/opt/agentshield/backend
+EnvironmentFile=/opt/agentshield/backend/.env
+ExecStart=/opt/agentshield/backend/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8001 --workers 1
+Restart=on-failure
+RestartSec=5
+
+# 2G 内存服务器：单 worker，避免与现有业务争抢
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

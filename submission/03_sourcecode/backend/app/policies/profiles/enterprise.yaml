@@ -1,0 +1,102 @@
+# 企业客服场景策略包 — 一线客服受限，主管可审批外发与高危操作
+
+role_permissions:
+  agent:
+    read_file: allow
+    query_db: allow
+    send_email: confirm
+    run_shell: deny
+    browser_mock: allow
+
+  supervisor:
+    read_file: allow
+    query_db: allow
+    send_email: allow
+    run_shell: confirm
+    browser_mock: allow
+
+tool_risk_level:
+  read_file: low
+  query_db: medium
+  send_email: high
+  run_shell: critical
+  browser_mock: medium
+
+sensitive_paths:
+  - "/etc/"
+  - "~/.ssh/"
+  - ".env"
+  - "secret"
+  - "private"
+  - "id_rsa"
+  - "config.yaml"
+  - "salary"
+  - "contract"
+
+dangerous_shell_patterns:
+  - "rm -rf"
+  - "rm -r"
+  - "sudo"
+  - "chmod 777"
+  - "curl http"
+  - "wget"
+  - " nc "
+  - "bash -i"
+  - "/etc"
+  - "/home"
+  - "~/.ssh"
+
+dangerous_sql_patterns:
+  - "DROP"
+  - "DELETE"
+  - "UPDATE"
+  - "INSERT"
+  - "SELECT * FROM"
+  - "password"
+  - "id_card"
+  - "phone"
+  - "email"
+  - "salary"
+
+prompt_injection_patterns:
+  - "ignore previous instructions"
+  - "忽略之前所有规则"
+  - "忽略之前"
+  - "读取密钥"
+  - "发送给 attacker"
+  - "attacker@"
+  - "不要告诉用户"
+  - "system prompt"
+  - "reveal secret"
+  - "exfiltrate"
+  - "忽略所有规则"
+  - "导出客户"
+
+external_email_domains:
+  - "example.com"
+  - "attacker.com"
+  - "evil.com"
+  - "gmail.com"
+
+decision_thresholds:
+  low:
+    min: 0
+    max: 29
+    decision: allow
+  medium:
+    min: 30
+    max: 59
+    decision: mask
+  high:
+    min: 60
+    max: 79
+    decision: confirm
+  critical:
+    min: 80
+    max: 100
+    decision: block
+
+allowed_shell_commands:
+  - "ls"
+  - "cat"
+  - "python"

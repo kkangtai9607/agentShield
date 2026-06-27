@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "agentshield": {
+      "command": "/path/to/agentShield/backend/.venv/bin/python",
+      "args": ["-m", "app.agents.mcp_server"],
+      "cwd": "/path/to/agentShield/backend",
+      "env": {
+        "PYTHONPATH": "/path/to/agentShield/backend"
+      }
+    }
+  }
+}

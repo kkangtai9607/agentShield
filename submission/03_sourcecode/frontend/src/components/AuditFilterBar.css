@@ -1,0 +1,57 @@
+.audit-filter-card {
+  background: #ffffff;
+  border: 1px solid #e6f0ff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(15, 35, 70, 0.04);
+  margin-bottom: 20px;
+}
+
+.audit-filter-card .ant-card-body {
+  padding: 20px 24px;
+}
+
+.audit-filter-row-main {
+  display: grid;
+  grid-template-columns: 220px 180px 180px 180px 180px;
+  gap: 12px;
+  align-items: center;
+}
+
+.audit-filter-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.audit-keyword-input {
+  flex: 1;
+  min-width: 260px;
+}
+
+.audit-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.audit-actions-label {
+  color: #64748b;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+@media (max-width: 1200px) {
+  .audit-filter-row-main {
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
+  }
+
+  .audit-filter-row-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .audit-actions {
+    justify-content: flex-start;
+  }
+}

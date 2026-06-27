@@ -1,0 +1,22 @@
+# AgentShield 即插即用集成配置（复制为 agentshield.yaml 后按需修改）
+
+integration:
+  # http: 任意语言通过 REST 调用 /api/shield/evaluate
+  # python_sdk: 使用 @shield_tool 装饰器
+  # langchain: 参考 app/agents/langchain_tools.py
+  # mcp: python -m app.agents.mcp_server
+  mode: http
+  gateway_url: http://127.0.0.1:8000
+
+policy:
+  # 你的策略文件（复制 user_policy.template.yaml）
+  file: ./config/my_policy.yaml
+
+identity:
+  # 与 policy 中 role_permissions 的 key 对应
+  default_role: operator
+
+# 集成三步:
+# 1. cp config/user_policy.template.yaml config/my_policy.yaml
+# 2. .env 添加 POLICY_FILE=./config/my_policy.yaml
+# 3. Agent 每次 tool_call 前 POST /api/shield/evaluate

@@ -1,0 +1,8 @@
+# 本地推送，云上同步
+cd /home/ubuntu/code/wangan/agentshield
+git pull                    # 多人协作时先拉最新（可选）
+# … 改代码 …
+git add -A && git commit -m "说明" && git push   # 备份到 GitHub（建议保留）
+
+# 线上演示: http://114.215.209.144:8088
+bash deploy/sync-to-server.sh root@114.215.209.144

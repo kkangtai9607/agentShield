@@ -1,0 +1,56 @@
+# AgentShield 场景策略包清单（即插即用 Profile）
+default_profile: campus
+
+profiles:
+  campus:
+    name: 校园演示
+    description: 学生 / 教师 / 管理员三角色，适合竞赛答辩与教学场景演示。
+    role_labels:
+      student: 学生
+      teacher: 教师
+      admin: 管理员
+    demo_accounts:
+      - username: student01
+        password: student123
+        role: student
+        name: 学生演示
+      - username: teacher01
+        password: teacher123
+        role: teacher
+        name: 教师演示
+      - username: admin01
+        password: admin123
+        role: admin
+        name: 管理员演示
+
+  personal:
+    name: 个人助手
+    description: 主人 / 访客双角色，适合个人 Agent、本地助手与家庭场景。
+    role_labels:
+      owner: 主人
+      guest: 访客
+    demo_accounts:
+      - username: owner01
+        password: owner123
+        role: owner
+        name: 个人用户
+      - username: guest01
+        password: guest123
+        role: guest
+        name: 访客
+
+  enterprise:
+    name: 企业客服
+    description: 一线客服 / 主管双角色，适合企业内部 Agent 与工单场景。
+    role_labels:
+      agent: 一线客服
+      supervisor: 主管
+    demo_accounts:
+      - username: agent01
+        password: agent123
+        role: agent
+        name: 客服演示
+      - username: supervisor01
+        password: supervisor123
+        role: supervisor
+        name: 主管演示

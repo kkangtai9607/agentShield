@@ -1,0 +1,19 @@
+Submission Checklist
+====================
+
+Before upload:
+[ ] Work report email filled on cover page (AgentShield_Work_Report.docx)
+[ ] Four zip files use ASCII names only
+[ ] No .env / API keys / server passwords in any package
+[ ] sourcecode zip excludes .venv, node_modules, .git
+
+Upload mapping:
+[ ] Documents folder    -> agentshield_documents.zip
+[ ] Executable folder   -> agentshield_executable.zip
+[ ] Source code folder  -> agentshield_sourcecode.zip
+[ ] Other folder        -> agentshield_other.zip
+
+Verify locally (optional):
+  unzip agentshield_sourcecode.zip
+  bash run_local_demo.sh
+  open http://localhost:5173
