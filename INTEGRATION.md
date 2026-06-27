@@ -1,27 +1,28 @@
 # AgentShield 即插即用集成指南
 
-> **普通用户 / 评委**：不必先部署网关。打开控制台「快速集成 → 在线试集成」即可体验。  
-> **开发者**：git clone 后 `from app.integration import evaluate`，3 行嵌入，无需 uvicorn。  
-> **团队**：可选部署控制台，Agent 调同源 `/api/shield/evaluate`。
+> **在线演示**：<https://agentshieldtop.xyz>（登录后打开「快速集成 → 在线试集成」）  
+> **开源仓库**：<https://github.com/kkangtai9607/agentShield>  
+> **普通用户 / 评委**：不必先部署网关，直接访问线上站点即可体验。  
+> **开发者**：`git clone` 后 `from app.integration import evaluate`，3 行嵌入，无需 uvicorn。
 
 ## 三种方式怎么选？
 
 | 方式 | 是否需要部署 | 适合谁 | 入口 |
 |------|-------------|--------|------|
-| **在线体验** | 否（打开演示站点即可） | 评委、产品体验 | 控制台 → 快速集成 → 在线试集成 |
-| **嵌入模式** | 否（import 即用） | Python Agent 开发者 | `from app.integration import evaluate` |
-| **HTTP 网关** | 是（可选） | 多语言 / 远程 Agent | `POST /api/shield/evaluate`（同源） |
+| **在线体验** | 否 | 评委、产品体验 | <https://agentshieldtop.xyz/integration-guide> |
+| **嵌入模式** | 否（import 即用） | Python Agent 开发者 | `git clone` → `from app.integration import evaluate` |
+| **HTTP 网关** | 可选（已提供线上实例） | 多语言 / 远程 Agent | `POST https://agentshieldtop.xyz/api/shield/evaluate` |
 
 ---
 
 ## 方式一：在线体验（0 配置）
 
-1. 启动演示站点（或访问主办方部署的地址）
-2. 登录演示账号
-3. 打开 **快速集成** 页，在「在线试集成」表单中选择角色、工具、参数，点击 **立即评估**
+1. 浏览器打开 **https://agentshieldtop.xyz**
+2. 使用演示账号登录（校园场景：`student01` / `student123`）
+3. 侧栏进入 **快速集成**，在「在线试集成」中选择角色、工具、参数，点击 **立即评估**
 4. 查看 `execute_allowed` 与决策原因 —— 与正式集成 API 完全一致
 
-**无需 curl，无需记住 127.0.0.1:8000。**
+**无需 curl，无需本地启动服务。**
 
 ---
 
@@ -30,8 +31,10 @@
 ### 30 秒跑通
 
 ```bash
-git clone <your-repo>
-cd agentshield/backend
+git clone https://github.com/kkangtai9607/agentShield.git
+cd agentShield/backend
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
 PYTHONPATH=. python ../examples/minimal_embed.py
 ```
 
@@ -55,7 +58,7 @@ if r["execute_allowed"]:
 ### CLI 一键
 
 ```bash
-cd agentshield/backend
+cd agentShield/backend
 
 # 检查一次调用
 PYTHONPATH=. python -m app.integration.cli check \
@@ -87,17 +90,17 @@ def my_search(query: str) -> str:
 
 ## 方式三：HTTP 网关（可选）
 
-仅当 Agent 与 AgentShield **分离部署**（不同进程/语言）时使用。
-
-若您通过浏览器已打开 AgentShield 控制台，请使用 **当前站点同源地址**：
+线上已部署实例，Agent 与 AgentShield 分离时可直接调用：
 
 ```
-POST https://<演示域名>/api/shield/evaluate
+POST https://agentshieldtop.xyz/api/shield/evaluate
 ```
 
-**不要**硬编码 `127.0.0.1:8000` —— 前端 Vite 会把 `/api` 代理到后端，评委在局域网访问时同源即可。
+若你自行部署控制台，请使用**当前站点同源地址**（浏览器打开控制台即 `/api`），勿硬编码 `localhost`。
 
 ```bash
+ORIGIN=https://agentshieldtop.xyz
+
 TOKEN=$(curl -s -X POST "$ORIGIN/api/auth/login" \
   -H 'Content-Type: application/json' \
   -d '{"username":"student01","password":"student123"}' | jq -r .access_token)
@@ -113,14 +116,14 @@ curl -s -X POST "$ORIGIN/api/shield/evaluate" \
   }'
 ```
 
-返回 `execute_allowed: true` 时由 **你的 Agent 执行真实工具**。
+健康检查：`GET https://agentshieldtop.xyz/health`
 
 Python HTTP SDK：
 
 ```python
 from app.integration.sdk import ShieldClient
 
-client = ShieldClient("https://你的域名", token="...")
+client = ShieldClient("https://agentshieldtop.xyz", token="...")
 res = client.evaluate(user_role="operator", tool_name="query_db", tool_args={"sql": "..."})
 if client.should_execute(res):
     run_your_real_tool()
@@ -152,7 +155,7 @@ HTTP 部署：`.env` 中 `POLICY_FILE=./config/my_policy.yaml`
 - `profiles/campus|personal|enterprise`：竞赛演示切换
 - `POLICY_FILE` / 嵌入 `configure(policy_file=...)`：真实用户即插即用
 
-答辩话术：**演示用场景包 + 在线试集成；落地用嵌入模式或 POLICY_FILE，无需改网关代码。**
+答辩话术：**线上站点 + 在线试集成给评委零配置体验；开发者 git clone 用嵌入模式；团队落地用 POLICY_FILE 或 HTTP evaluate。**
 
 ---
 
@@ -162,3 +165,11 @@ HTTP 部署：`.env` 中 `POLICY_FILE=./config/my_policy.yaml`
 - MCP：`python -m app.agents.mcp_server`（stdio）
 
 二者在演示环境中仍依赖控制台后端；**自研 Agent 优先推荐嵌入模式**。
+
+---
+
+## 源码与部署
+
+- 源码：<https://github.com/kkangtai9607/agentShield>
+- 自行部署：见仓库内 `deploy/DEPLOY.md`
+- 服务器更新：`git pull && sudo bash deploy/deploy.sh`

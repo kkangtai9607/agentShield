@@ -55,9 +55,9 @@ def integration_guide(current_user: TokenUser = Depends(get_current_user)):
             IntegrationMode(
                 id="online",
                 name="在线体验（零配置）",
-                description="打开控制台「快速集成 → 在线试集成」，登录即用，无需 curl。",
+                description="访问 https://agentshieldtop.xyz → 快速集成 → 在线试集成，登录即用。",
                 steps=[
-                    "登录演示账号",
+                    "打开 https://agentshieldtop.xyz 并登录演示账号",
                     "填写角色、工具名、参数",
                     "点击立即评估，查看 execute_allowed",
                 ],
@@ -65,9 +65,9 @@ def integration_guide(current_user: TokenUser = Depends(get_current_user)):
             IntegrationMode(
                 id="embed",
                 name="嵌入模式（推荐）",
-                description="from app.integration import evaluate — 进程内调用，无需 uvicorn。",
+                description="git clone https://github.com/kkangtai9607/agentShield → from app.integration import evaluate",
                 steps=[
-                    "PYTHONPATH=. python ../examples/minimal_embed.py",
+                    "git clone 开源仓库，PYTHONPATH=. python ../examples/minimal_embed.py",
                     "或 configure(policy_file=...) + evaluate(...)",
                     "execute_allowed 为 true 时执行真实工具",
                 ],
@@ -84,10 +84,10 @@ def integration_guide(current_user: TokenUser = Depends(get_current_user)):
             IntegrationMode(
                 id="http",
                 name="HTTP API（可选）",
-                description="分离部署时使用 POST /api/shield/evaluate（建议同源，勿硬编码 localhost）。",
+                description="POST https://agentshieldtop.xyz/api/shield/evaluate（或自建同源地址）",
                 steps=[
                     "登录获取 JWT",
-                    "POST 当前站点 /api/shield/evaluate",
+                    "POST /api/shield/evaluate",
                     "根据 execute_allowed 执行真实工具",
                 ],
             ),
@@ -117,11 +117,13 @@ def integration_guide(current_user: TokenUser = Depends(get_current_user)):
         agentshield_config_example_path="config/agentshield.yaml.example",
         evaluate_endpoint="/api/shield/evaluate",
         quick_start=[
-            "评委：打开「快速集成 → 在线试集成」，零配置体验",
-            "开发者：git clone → PYTHONPATH=. python ../examples/minimal_embed.py",
+            "评委：打开 https://agentshieldtop.xyz → 快速集成 → 在线试集成",
+            "开发者：git clone https://github.com/kkangtai9607/agentShield → minimal_embed.py",
             "集成：from app.integration import evaluate；execute_allowed 时再执行真实工具",
-            "可选 HTTP：POST 当前站点 /api/shield/evaluate（非 127.0.0.1 硬编码）",
+            "HTTP：POST https://agentshieldtop.xyz/api/shield/evaluate",
         ],
+        live_site_url="https://agentshieldtop.xyz",
+        github_repo_url="https://github.com/kkangtai9607/agentShield",
     )
 
 

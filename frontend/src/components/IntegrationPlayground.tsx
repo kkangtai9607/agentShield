@@ -13,6 +13,7 @@ import {
 } from 'antd'
 import { api } from '../api/client'
 import DecisionCard from './DecisionCard'
+import { LIVE_SITE_URL } from '../config/site'
 import { useProfile } from '../context/ProfileContext'
 import { getStoredUser } from '../utils/auth'
 
@@ -59,7 +60,7 @@ export default function IntegrationPlayground() {
     }
   }
 
-  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://你的域名'
+  const origin = typeof window !== 'undefined' ? window.location.origin : LIVE_SITE_URL
   const embedSnippet = `from app.integration import configure, evaluate
 
 configure(profile="campus")  # 或 policy_file="./my_policy.yaml"
@@ -67,7 +68,7 @@ r = evaluate(user_role="${form.getFieldValue('user_role') || 'student'}", tool_n
 if r["execute_allowed"]:
     your_real_tool()` 
 
-  const httpSnippet = `# 当前站点同源调用（评委打开控制台即可试，无需记 127.0.0.1:8000）
+  const httpSnippet = `# 线上 / 当前站点同源调用
 curl -X POST ${origin}/api/shield/evaluate \\
   -H "Authorization: Bearer $TOKEN" \\
   -H "Content-Type: application/json" \\

@@ -24,18 +24,41 @@ nginx（已有 + 新增 agentshieldtop.xyz server 块）
 
 ## 二、域名解析（阿里云 DNS）
 
-登录 [阿里云域名控制台](https://dns.console.aliyun.com/) → `agentshieldtop.xyz` → 解析设置：
+### 2.1 先改 DNS 服务器（必做，否则 certbot 报 NXDOMAIN）
+
+**仅**在「云解析」里加 A 记录不够。还需在 **域名列表 → agentshieldtop.xyz → DNS 修改** 中，把 DNS 服务器改为 **阿里云 DNS（云解析）**，例如：
+
+```text
+dnsXX.hichina.com
+dnsXX.hichina.com
+```
+
+保存后等待 **10 分钟～数小时**。验证（应出现 `hichina.com`，且 A 为你的公网 IP，而不是 `11.18.0.x`）：
+
+```bash
+dig +short agentshieldtop.xyz NS @223.5.5.5
+dig +short agentshieldtop.xyz A @223.5.5.5
+```
+
+若 A 仍是 `11.18.0.21` 等，说明 NS 未生效或解析加错账号，**不要**反复跑 certbot。
+
+### 2.2 添加 A 记录
+
+登录 [阿里云云解析](https://dns.console.aliyun.com/) → `agentshieldtop.xyz` → 解析设置：
 
 | 记录类型 | 主机记录 | 记录值 |
 |---------|---------|--------|
 | A | `@` | 你的轻量服务器公网 IP |
 | A | `www` | 同上 |
 
-等待 5–10 分钟生效。本地验证：
+等待生效后验证：
 
 ```bash
-ping agentshieldtop.xyz
+dig +short agentshieldtop.xyz @223.5.5.5    # 应返回你的公网 IP
+curl -I http://agentshieldtop.xyz             # 应 200/301，不是 Could not resolve
 ```
+
+**DNS 未生效前临时访问**：在本机 hosts 加一行 `你的IP  agentshieldtop.xyz`，浏览器访问 `http://agentshieldtop.xyz`（不要用 `IP:8001`，后端只监听 127.0.0.1）。
 
 ---
 

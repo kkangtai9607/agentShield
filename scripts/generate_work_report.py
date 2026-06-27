@@ -9,6 +9,8 @@ from docx.oxml.ns import qn
 from docx.shared import Pt, Cm
 
 OUTPUT = Path(__file__).resolve().parents[1] / "作品报告_AgentShield.docx"
+LIVE_SITE = "https://agentshieldtop.xyz"
+GITHUB_REPO = "https://github.com/kkangtai9607/agentShield"
 
 BODY_FONT = "宋体"
 BODY_SIZE = Pt(12)  # 小四
@@ -126,6 +128,8 @@ def build_document():
         "系统支持校园、个人助手、企业客服三套即插即用策略包，"
         "可通过 HTTP API、Python 装饰器、LangChain、MCP 等方式接入主流 Agent 框架，"
         "并可在无外部 API 密钥条件下离线完整演示。"
+        f"作品已部署上线演示站点（{LIVE_SITE}），"
+        f"并在 GitHub 开源（{GITHUB_REPO}），便于评委在线体验与开发者二次集成。"
     )
     add_para(
         doc,
@@ -166,13 +170,17 @@ def build_document():
     add_bullet(doc, "多场景策略包：校园 / 个人 / 企业一键切换，策略与代码解耦。")
     add_bullet(doc, "即插即用集成：HTTP evaluate API、Python 装饰器、LangChain、MCP 四种接入方式。")
     add_bullet(doc, "离线可演示：Mock 计划引擎 + 沙箱工具，答辩现场无需外网 API。")
+    add_bullet(doc, f"已上线演示：{LIVE_SITE}，评委零配置访问「快速集成 → 在线试集成」。")
+    add_bullet(doc, f"开源可复现：{GITHUB_REPO}，支持 git clone 后嵌入模式本地集成。")
     add_heading(doc, "1.4 应用前景", level=2)
     add_para(
         doc,
         "AgentShield 可部署于教育科研平台的教学 Agent、个人知识助手、"
         "企业客服/工单 Agent、低代码 Agent 平台等场景。"
         "用户通过 POLICY_FILE 配置自有角色与工具权限即可落地，"
-        "适用于对数据外发、命令执行、数据库查询有合规要求的行业环境。",
+        "适用于对数据外发、命令执行、数据库查询有合规要求的行业环境。"
+        f"当前已通过阿里云轻量服务器完成生产部署，"
+        f"演示地址 {LIVE_SITE}，源码托管于 {GITHUB_REPO}。",
     )
     doc.add_page_break()
 
@@ -230,7 +238,8 @@ def build_document():
         "攻击演示：恶意文档、网页污染、数据库越权、危险命令四剧本一键运行。",
         "Benchmark：固定样本跑分与评委现场单条评估。",
         "审计日志：筛选、详情、CSV 导出及待确认记录处理。",
-        "框架演示 / 快速集成：LangChain、MCP 演示与接入文档。",
+        "框架演示 / 快速集成：LangChain、MCP 演示与接入文档，"
+        f"在线试集成与开源仓库（{GITHUB_REPO}）说明。",
     ]
     for p in pages:
         add_bullet(doc, p)
@@ -241,6 +250,8 @@ def build_document():
     add_bullet(doc, "数据库：SQLite 全链路审计，记录风险分、决策、原因与结果预览。")
     add_bullet(doc, "Benchmark 平均评估延迟：约 2.1 ms/条（本地 campus 策略实测）。")
     add_bullet(doc, "自动化测试：51 条 pytest 用例覆盖策略、绕过、confirm、语义、鉴权等。")
+    add_bullet(doc, f"生产部署：nginx + systemd，域名 {LIVE_SITE}，后端 127.0.0.1:8001 仅本机反代。")
+    add_bullet(doc, f"开源仓库：{GITHUB_REPO}，含 deploy 脚本与 INTEGRATION.md 集成指南。")
     doc.add_page_break()
 
     # 第三章
@@ -255,8 +266,9 @@ def build_document():
     )
     add_heading(doc, "3.2 测试环境", level=2)
     add_bullet(doc, "操作系统：Linux；Python 3.11；Node.js 18+。")
-    add_bullet(doc, "后端：FastAPI + Uvicorn，默认 USE_MOCK_LLM=true。")
-    add_bullet(doc, "前端：Vite 开发服务器，支持局域网访问演示。")
+    add_bullet(doc, "本地开发：FastAPI + Uvicorn + Vite 开发服务器。")
+    add_bullet(doc, f"线上环境：阿里云轻量服务器，HTTPS 站点 {LIVE_SITE}，nginx 反代 + Let's Encrypt。")
+    add_bullet(doc, "后端：FastAPI + Uvicorn（生产单 worker），默认 USE_MOCK_LLM=true。")
     add_bullet(doc, "数据库：SQLite 本地文件 agentshield.db。")
     add_heading(doc, "3.3 Benchmark 结果", level=2)
     add_para(
@@ -339,7 +351,9 @@ def build_document():
             "4.5 框架无关的开放集成",
             "提供 HTTP evaluate、Python 装饰器、LangChain StructuredTool、MCP stdio 四种接入路径，"
             "不绑定单一 Agent 框架，降低用户迁移成本，"
-            "体现“安全网关”而非“演示 Demo”的工程定位。",
+            "体现“安全网关”而非“演示 Demo”的工程定位。"
+            f"作品已开源（{GITHUB_REPO}）并上线演示站（{LIVE_SITE}），"
+            "评委可在线体验，开发者可 clone 后嵌入集成。",
         ),
     ]
     for title, body in innovations:
@@ -356,7 +370,9 @@ def build_document():
         "系统以行为级拦截为核心，融合 RBAC 策略引擎、规范化防绕过、"
         "本地语义意图检测、工具返回 Content Guard、JWT 鉴权与全链路审计，"
         "并提供四层决策与人工确认闭环。"
-        "三套场景策略包与多种集成方式使系统兼具竞赛演示表现力与工程落地潜力。",
+        "三套场景策略包与多种集成方式使系统兼具竞赛演示表现力与工程落地潜力。"
+        f"作品已完成云端部署（{LIVE_SITE}）与 GitHub 开源（{GITHUB_REPO}），"
+        "形成“在线体验 + 源码复现 + 嵌入集成”的完整交付形态。",
     )
     add_para(
         doc,

@@ -39,3 +39,5 @@ class IntegrationGuideResponse(BaseModel):
     agentshield_config_example_path: str
     evaluate_endpoint: str
     quick_start: List[str]
+    live_site_url: str = "https://agentshieldtop.xyz"
+    github_repo_url: str = "https://github.com/kkangtai9607/agentShield"
