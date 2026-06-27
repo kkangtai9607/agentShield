@@ -127,6 +127,8 @@ def build_document():
         "工具返回内容二次审查及全链路审计，并输出 allow / mask / confirm / block 四层决策。"
         "系统支持校园、个人助手、企业客服三套即插即用策略包，"
         "可通过 HTTP API、Python 装饰器、LangChain、MCP 等方式接入主流 Agent 框架，"
+        "并支持 Cursor、Claude Desktop、Trae 等 IDE 通过 MCP 挂载受保护工具，"
+        "以及 Claude API、OpenAI Codex 在 tool calling 循环中调用 evaluate 接口，"
         "并可在无外部 API 密钥条件下离线完整演示。"
         f"作品已部署上线演示站点（{LIVE_SITE}），"
         f"并在 GitHub 开源（{GITHUB_REPO}），便于评委在线体验与开发者二次集成。"
@@ -168,7 +170,8 @@ def build_document():
     add_bullet(doc, "行为级安全：拦截对象为 tool_name + tool_args + 用户角色 + 会话上下文，而非仅用户输入。")
     add_bullet(doc, "四层决策：allow（放行）、mask（脱敏）、confirm（人工确认）、block（阻断）。")
     add_bullet(doc, "多场景策略包：校园 / 个人 / 企业一键切换，策略与代码解耦。")
-    add_bullet(doc, "即插即用集成：HTTP evaluate API、Python 装饰器、LangChain、MCP 四种接入方式。")
+    add_bullet(doc, "即插即用集成：HTTP evaluate、Python embed、LangChain、MCP 四种接入方式。")
+    add_bullet(doc, "主流 Agent 适配：Cursor / Claude Desktop / Trae（MCP）；Claude API / Codex（HTTP evaluate）。")
     add_bullet(doc, "离线可演示：Mock 计划引擎 + 沙箱工具，答辩现场无需外网 API。")
     add_bullet(doc, f"已上线演示：{LIVE_SITE}，评委零配置访问「快速集成 → 在线试集成」。")
     add_bullet(doc, f"开源可复现：{GITHUB_REPO}，支持 git clone 后嵌入模式本地集成。")
@@ -238,8 +241,9 @@ def build_document():
         "攻击演示：恶意文档、网页污染、数据库越权、危险命令四剧本一键运行。",
         "Benchmark：固定样本跑分与评委现场单条评估。",
         "审计日志：筛选、详情、CSV 导出及待确认记录处理。",
-        "框架演示 / 快速集成：LangChain、MCP 演示与接入文档，"
-        f"在线试集成与开源仓库（{GITHUB_REPO}）说明。",
+        "框架演示 / 快速集成：LangChain、MCP 演示；"
+        "主流 Agent 接入（Cursor、Claude、Trae、Codex）文档与在线试集成；"
+        f"开源仓库（{GITHUB_REPO}）与演示站（{LIVE_SITE}）。",
     ]
     for p in pages:
         add_bullet(doc, p)
@@ -251,7 +255,7 @@ def build_document():
     add_bullet(doc, "Benchmark 平均评估延迟：约 2.1 ms/条（本地 campus 策略实测）。")
     add_bullet(doc, "自动化测试：51 条 pytest 用例覆盖策略、绕过、confirm、语义、鉴权等。")
     add_bullet(doc, f"生产部署：nginx + systemd，域名 {LIVE_SITE}，后端 127.0.0.1:8001 仅本机反代。")
-    add_bullet(doc, f"开源仓库：{GITHUB_REPO}，含 deploy 脚本与 INTEGRATION.md 集成指南。")
+    add_bullet(doc, f"开源仓库：{GITHUB_REPO}，含 INTEGRATION.md、INTEGRATION-AGENTS.md 与 deploy 脚本。")
     doc.add_page_break()
 
     # 第三章
@@ -262,7 +266,8 @@ def build_document():
         "测试分为四个层次：（1）单元测试：策略引擎、规范化、语义相似度、JWT 鉴权；"
         "（2）场景测试：四内置攻击剧本端到端阻断；"
         "（3）Benchmark 测试：22 条标注样本（normal/attack/bypass）自动跑分；"
-        "（4）人工演示测试：三场景策略包切换、人工 confirm 闭环、LangChain/MCP 接入演示。",
+        "（4）人工演示测试：三场景策略包切换、人工 confirm 闭环、LangChain/MCP 接入演示；"
+        f"（5）线上验收：{LIVE_SITE} 健康检查、登录、快速集成与攻击剧本演示。",
     )
     add_heading(doc, "3.2 测试环境", level=2)
     add_bullet(doc, "操作系统：Linux；Python 3.11；Node.js 18+。")
@@ -350,6 +355,8 @@ def build_document():
         (
             "4.5 框架无关的开放集成",
             "提供 HTTP evaluate、Python 装饰器、LangChain StructuredTool、MCP stdio 四种接入路径，"
+            "并编写 INTEGRATION-AGENTS.md 指导 Cursor、Claude Desktop、Trae 通过 MCP 配置受保护工具，"
+            "以及 Claude API、OpenAI Codex 在 tool_use / tool_calls 循环中调用安全网关，"
             "不绑定单一 Agent 框架，降低用户迁移成本，"
             "体现“安全网关”而非“演示 Demo”的工程定位。"
             f"作品已开源（{GITHUB_REPO}）并上线演示站（{LIVE_SITE}），"
@@ -372,7 +379,7 @@ def build_document():
         "并提供四层决策与人工确认闭环。"
         "三套场景策略包与多种集成方式使系统兼具竞赛演示表现力与工程落地潜力。"
         f"作品已完成云端部署（{LIVE_SITE}）与 GitHub 开源（{GITHUB_REPO}），"
-        "形成“在线体验 + 源码复现 + 嵌入集成”的完整交付形态。",
+        "形成“在线体验 + 源码复现 + 嵌入集成 + 主流 Agent MCP/HTTP 接入”的完整交付形态。",
     )
     add_para(
         doc,
