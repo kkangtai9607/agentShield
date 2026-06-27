@@ -1,0 +1,48 @@
+# 密钥与环境（仅保留 *.example）
+.env
+.env.*
+!.env.example
+!**/.env.example
+backend/.env
+deploy/.env.production
+
+# 服务器私有部署说明（含 IP/账号等，勿提交）
+deploy/DEPLOY-114.215.209.144.md
+deploy/DEPLOY-SERVER.local.md
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+*.db
+backend/agentshield.db
+backend/mock_sent_emails.json
+
+# Node / 前端构建产物
+node_modules/
+frontend/dist/
+frontend/.vite/
+*.local
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# 运行时状态
+backend/app/policies/active_profile.json
+
+# 日志与打包
+*.log
+*.tgz
+*.tar.gz

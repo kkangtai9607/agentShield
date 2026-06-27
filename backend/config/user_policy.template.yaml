@@ -1,0 +1,81 @@
+# 复制为 my_policy.yaml，按你的业务改 role 名与工具名即可
+# 在 .env 设置: POLICY_FILE=./config/my_policy.yaml
+
+role_permissions:
+  # 身份 key 自定，与 JWT / evaluate 请求中的 user_role 一致
+  operator:
+    read_file: allow
+    query_db: allow
+    send_email: confirm
+    run_shell: deny
+    browser_mock: allow
+    # 可添加你的工具名，如:
+    # search_api: allow
+    # delete_record: deny
+
+  viewer:
+    read_file: allow
+    query_db: deny
+    send_email: deny
+    run_shell: deny
+    browser_mock: allow
+
+tool_risk_level:
+  read_file: low
+  query_db: medium
+  send_email: high
+  run_shell: critical
+  browser_mock: medium
+  # search_api: medium
+
+sensitive_paths:
+  - ".env"
+  - "secret"
+  - "private"
+  - "id_rsa"
+  - "/etc/"
+  - "~/.ssh/"
+
+dangerous_shell_patterns:
+  - "rm -rf"
+  - "sudo"
+  - "chmod 777"
+
+dangerous_sql_patterns:
+  - "DROP"
+  - "DELETE"
+  - "UPDATE"
+  - "INSERT"
+  - "SELECT * FROM"
+
+prompt_injection_patterns:
+  - "ignore previous instructions"
+  - "忽略之前所有规则"
+  - "system prompt"
+  - "reveal secret"
+
+external_email_domains:
+  - "attacker.com"
+  - "evil.com"
+
+decision_thresholds:
+  low:
+    min: 0
+    max: 29
+    decision: allow
+  medium:
+    min: 30
+    max: 59
+    decision: mask
+  high:
+    min: 60
+    max: 79
+    decision: confirm
+  critical:
+    min: 80
+    max: 100
+    decision: block
+
+allowed_shell_commands:
+  - "ls"
+  - "cat"
